@@ -1,0 +1,93 @@
+﻿@model IEnumerable<NorthwindMVC2._0.Models.Orders>
+
+
+
+@{
+    ViewBag.Title = "TilausOtsikot";
+}
+
+@section scripts {
+    <script type="text/javascript">
+        $(function () {
+            $(".showOrderClass").click(function () {
+                let orderId = $(this).data("orderid");
+                //alert("Klikkasit tilausnumeroa: " + orderId);
+                //document.getElementById("OrderID").value = orderId;
+                //PartialView:
+                var url = "/Orders/_TilausRivit/?OrderID=" + orderId;
+                $("#orderDetails_" + orderId).append(" <b>Loading order " + orderId + " rows...</b>");
+                var $detailDiv = $("#orderDetails_" + orderId);
+                console.log(url);
+                console.log($detailDiv);
+                $.get(url, function (data) {
+                    $detailDiv.replaceWith(data);
+                });
+            });
+        });
+    </script>
+}
+
+<h2>TilausOtsikot</h2>
+
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<!--//koko selaimen alue käyttöön-->
+<div class="container-fluid">
+    <div class="card-header">
+        <a class="card-link">
+            <form>
+                <div class="input-group input-group-lg mb-3 ">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text text-bg-secondary" font-weight-bold">Order</span>
+                    </div>
+                    <input type="text" class="form-control text-bg-secondary font-weight-bold px-2" value="Customer" disabled>
+                    <input type="text" class="form-control text-bg-secondary font-weight-bold px-2" value="ShipName" disabled>
+                    <input type="text" class="form-control text-bg-secondary font-weight-bold px-2" value="ShipAddress" disabled>
+                    <input type="text" class="form-control text-bg-secondary font-weight-bold px-2" value="ShipCity" disabled>
+                    <input type="text" class="form-control text-bg-secondary font-weight-bold px-2" value="ShipCountry" disabled>
+                    <input type="text" class="form-control text-bg-secondary font-weight-bold px-2" value="ShipRegion" disabled>
+                    <input type="text" class="form-control text-bg-secondary font-weight-bold px-2" value="Shipper" disabled>
+                </div>
+            </form>
+        </a>
+    </div>
+    <div id="accordion">
+        @foreach (var item in Model)
+        {
+            <div class="card">
+                <div class="card-header">
+                    <!--BS5-->
+                    <a class="card-link showOrderClass" data-orderid="@item.OrderID" data-bs-toggle="collapse" href="#collapse_@item.OrderID">
+                        <form>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">@item.OrderID</span>
+                                </div>
+                                @*<label class="px-2" for="usr">@Html.DisplayNameFor(model => model.Customers.CompanyName):</label>*@
+                                <input type="text" class="form-control px-2" value="@item.Customers.CompanyName" disabled>
+                                <input type="text" class="form-control px-2" value="@item.ShipName" disabled>
+                                <input type="text" class="form-control px-2" value="@item.ShipAddress" disabled>
+                                <input type="text" class="form-control px-2" value="@item.ShipCity" disabled>
+                                <input type="text" class="form-control px-2" value="@item.ShipCountry" disabled>
+                                <input type="text" class="form-control px-2" value="@item.ShipRegion" disabled>
+                                <input type="text" class="form-control px-2" value="@item.Shippers.CompanyName" disabled>
+                            </div>
+                        </form>
+                    </a>
+                </div>
+                <!--BS5-->
+                <div id="collapse_@item.OrderID" class="collapse" data-bs-parent="#accordion">
+                    <div class="card-body">
+                        <!--jQuery renderöi tilauksen rivitiedot-->
+                        <div id="orderDetails_@item.OrderID"></div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
