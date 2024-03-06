@@ -13,6 +13,7 @@
                 let orderId = $(this).data("orderid");
                 //alert("Klikkasit tilausnumeroa: " + orderId);
                 //document.getElementById("OrderID").value = orderId;
+
                 //PartialView:
                 var url = "/Orders/_TilausRivit/?OrderID=" + orderId;
                 $("#orderDetails_" + orderId).append(" <b>Loading order " + orderId + " rows...</b>");
